@@ -198,7 +198,8 @@ class EmailService {
 
     // Get all emails in the chain, sorted by creation date
     return dbService.email.find({
-      chainId
+      chainId,
+      recipient: emailAddress,
     }).sort({createdAt: 1});
   }
 
