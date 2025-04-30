@@ -11,7 +11,7 @@ export const GET = withApi(async (request: NextRequest, context, decoded) => {
     throw new ApiError(401, 'Unauthorized');
   }
 
-  const params = await context.params;
+  const params = await context.params as any;
   const teamId = params.teamId;
   const {searchParams} = new URL(request.url);
   const page = parseInt(searchParams.get('page') || '1');
@@ -38,7 +38,7 @@ export const POST = withApi(async (request: NextRequest, context, decoded) => {
     throw new ApiError(401, 'Unauthorized');
   }
 
-  const params = await context.params;
+  const params = await context.params as any;
   const teamId = params.teamId;
   const body = await request.json();
 
@@ -58,7 +58,7 @@ export const POST = withApi(async (request: NextRequest, context, decoded) => {
   }
 
   // Add the team member
-  const member = await teamService.addTeamMember(teamId, result.data);
+  const member = await teamService.inviteTeamMember(teamId, result.data);
 
   return {
     data: member,

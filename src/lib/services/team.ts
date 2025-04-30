@@ -204,17 +204,21 @@ class TeamService {
   }
 
   async inviteTeamMember(teamId: string, data: AddTeamMemberSchema) {
+    const user = await dbService.user.findOne({
+      email: data.userId,
+    })
+    if (!user) throw new ApiError(404, 'User not found');
     // Check if user is already a member
     const existingMember = await dbService.teamMember.findOne({
       team: teamId,
-      user: data.userId,
+      user: user._id,
     });
 
     if (existingMember) {
       throw new ApiError(400, 'User is already a member of this team');
     }
 
-    return this.addTeamMember(teamId, data.userId, data.role);
+    return this.addTeamMember(teamId, user._id.toString(), data.role);
   }
 
   /**
